@@ -1,0 +1,14 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["ZGPY786UX7.by.app.zorkatv"],
+        "components": [
+          { "/": "/p/*", "comment": "programme: /p/<channel>/<start epoch>" },
+          { "/": "/live/*", "comment": "channel live: /live/<channel>" },
+          { "/": "/a/*", "comment": "recording from a moment: /a/<channel>/<start>?t=<s>" }
+        ]
+      }
+    ]
+  }
+}
