@@ -62,8 +62,45 @@
           small: 'ZorkaTV is an app for watching TV from your subscription. Times are Minsk time.', bad: 'The link is incomplete or out of date.' }
   };
   var t = T[lang] || T.ru;
-  var parts = location.pathname.replace(/^\/+|\/+$/g, '').split('/').map(decodeURIComponent);
-  var kind = parts[0], channel = parts[1] || '', start = parseInt(parts[2] || '', 10);
+  // Short links (ZorkaTV DeepLink.webURL): channel `_` + base 62 of the 20 digits of `ch…`, else the code itself;
+  // start in base 62: 5 characters = minutes since 1970, 6 = seconds. Links shared before: the plain code, Unix
+  // seconds (9–12 digits) and `?n=<title>`.
+  var B62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  function b62(text) {
+    var v = BigInt(0);
+    for (var i = 0; i < text.length; i++) {
+      var d = B62.indexOf(text[i]);
+      if (d < 0) return null;
+      v = v * BigInt(62) + BigInt(d);
+    }
+    return text.length ? v : null;
+  }
+  function decodeChannel(seg) {
+    if (!seg) return '';
+    if (seg[0] === '_') {
+      var short = seg.slice(1);
+      if (short.length < 1 || short.length > 12) return '';
+      var v = b62(short);
+      if (v === null) return '';
+      var digits = v.toString();
+      if (digits.length > 20) return '';
+      return 'ch' + '0'.repeat(20 - digits.length) + digits;
+    }
+    try { return decodeURIComponent(seg); } catch (e) { return ''; }
+  }
+  function decodeStart(seg) {
+    var sec = NaN;
+    if (!seg) return NaN;
+    if (seg.length >= 9) { sec = /^[0-9]+$/.test(seg) ? parseInt(seg, 10) : NaN; }
+    else if (seg.length === 5 || seg.length === 6) {
+      var v = b62(seg);
+      if (v !== null) sec = Number(v) * (seg.length === 5 ? 60 : 1);
+    }
+    return (sec >= 946684800 && sec <= 4102444800) ? sec : NaN;
+  }
+  var parts = location.pathname.replace(/^\/+|\/+$/g, '').split('/');
+  var kind = parts[0], channel = parts.length >= 2 ? decodeChannel(parts[1]) : '', start = decodeStart(parts[2] || '');
+  var shape = (kind === 'live' && parts.length === 2) || ((kind === 'p' || kind === 'a') && parts.length === 3);
   var q = new URLSearchParams(location.search);
   var deep = null, k = '', when = '';
   function fmt(sec) {
@@ -71,10 +108,14 @@
       return new Intl.DateTimeFormat(lang, { timeZone: 'Europe/Minsk', weekday: 'short', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' }).format(new Date(sec * 1000));
     } catch (e) { return new Date(sec * 1000).toISOString(); }
   }
-  if (kind === 'p' && channel && start) { deep = 'zorkatv://programme/' + encodeURIComponent(channel) + '/' + start; k = t.prog; when = fmt(start); }
+  var offset = /^[0-9]+(\.[0-9]+)?$/.test(q.get('t') || '') ? q.get('t') : '';
+  if (!shape) {}
+  else if (kind === 'p' && channel && start) { deep = 'zorkatv://programme/' + encodeURIComponent(channel) + '/' + start; k = t.prog; when = fmt(start); }
   else if (kind === 'live' && channel) { deep = 'zorkatv://live/' + encodeURIComponent(channel); k = t.live; }
-  else if (kind === 'a' && channel && start) { deep = 'zorkatv://archive/' + encodeURIComponent(channel) + '/' + start + (q.get('t') ? '?t=' + encodeURIComponent(q.get('t')) : ''); k = t.rec; when = fmt(start); }
-  var name = q.get('n');
+  else if (kind === 'a' && channel && start) { deep = 'zorkatv://archive/' + encodeURIComponent(channel) + '/' + start + (offset ? '?t=' + offset : ''); k = t.rec; when = fmt(start); }
+  // The title comes only with links shared before (`?n=`); short links show the kind («Передача») and the time.
+  var name = deep ? q.get('n') : null;
+  if (!name && deep) { name = k; k = ''; }
   document.getElementById('kind').textContent = k;
   document.getElementById('title').textContent = name || (deep ? t.title : t.bad);
   document.getElementById('when').textContent = when;
