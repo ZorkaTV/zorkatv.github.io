@@ -39,7 +39,7 @@
   .brand { display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; font-size: 22px; letter-spacing: -0.2px; }
   .brand img { width: 40px; height: 40px; border-radius: 10px; box-shadow: 0 0 0 1px rgba(255,255,255,.14), 0 0 30px rgba(255,181,71,.25); }
   .kind { font-size: 13px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--amber); }
-  .kind:empty, .when:empty, .note:empty { display: none; }
+  .kind:empty, .when:empty, .note:empty, .small:empty { display: none; }
   h1 { margin: 0; font-size: 26px; line-height: 1.2; letter-spacing: -0.3px; }
   .when { color: var(--muted); font-size: 16px; }
   .btn {
@@ -47,7 +47,10 @@
     background: linear-gradient(180deg, #FFC56E, #FFB547 60%, #F2A12F); color: #1A1206; font-weight: 700; font-size: 17px;
     box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 14px 34px -10px rgba(255,160,50,.65);
   }
-  .btn:focus-visible, .home:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+  .btn2 { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 16px; border-radius: 18px; text-decoration: none;
+    color: var(--text); font-weight: 650; font-size: 16px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.2); }
+  .btn2:hover { background: rgba(255,255,255,.13); }
+  .btn:focus-visible, .btn2:focus-visible, .home:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
   .note { color: var(--muted); font-size: 14px; line-height: 1.45; }
   .small { color: var(--dim); font-size: 12px; line-height: 1.45; }
   .home { color: var(--text); font-size: 14px; font-weight: 600; text-decoration: none; padding: 9px 16px; border-radius: 999px;
@@ -65,7 +68,9 @@
   <h1 id="title"></h1>
   <div class="when" id="when"></div>
   <a class="btn" id="open" href="zorkatv://">Открыть в ZorkaTV</a>
+  <a class="btn2" id="install" href="/">Установить ZorkaTV</a>
   <p class="note" id="note"></p>
+  <p class="note" id="device"></p>
   <p class="small" id="small"></p>
 </main>
 <a class="home" href="/">zorkatv.github.io</a>
@@ -73,14 +78,17 @@
 (function () {
   var lang = (navigator.language || 'ru').slice(0, 2);
   var T = {
-    ru: { prog: 'Передача', live: 'Канал в эфире', rec: 'Запись', title: 'Ссылка ZorkaTV', open: 'Открыть в ZorkaTV',
-          note: 'Если приложение уже установлено, ссылка открывается в нём сразу. Если открылась эта страница — нажмите кнопку.',
+    ru: { prog: 'Передача', live: 'Канал в эфире', rec: 'Запись', title: 'Ссылка ZorkaTV', open: 'Открыть в ZorkaTV', install: 'Установить ZorkaTV',
+          device: 'ZorkaTV работает на iPhone, iPad и Mac с Apple silicon. Откройте эту ссылку на одном из них.',
+          note: 'Если приложение уже установлено, ссылка открывается в нём сразу. Если открылась эта страница — нажмите «Открыть». Приложения ещё нет — «Установить».',
           small: 'ZorkaTV — приложение для просмотра ТВ по вашей подписке. Время указано по Минску.', bad: 'Ссылка неполная или устарела.' },
-    be: { prog: 'Перадача', live: 'Канал у эфіры', rec: 'Запіс', title: 'Спасылка ZorkaTV', open: 'Адкрыць у ZorkaTV',
-          note: 'Калі праграма ўжо ўсталявана, спасылка адкрываецца ў ёй адразу. Калі адкрылася гэтая старонка — націсніце кнопку.',
+    be: { prog: 'Перадача', live: 'Канал у эфіры', rec: 'Запіс', title: 'Спасылка ZorkaTV', open: 'Адкрыць у ZorkaTV', install: 'Усталяваць ZorkaTV',
+          device: 'ZorkaTV працуе на iPhone, iPad і Mac з Apple silicon. Адкрыйце гэтую спасылку на адным з іх.',
+          note: 'Калі праграма ўжо ўсталявана, спасылка адкрываецца ў ёй адразу. Калі адкрылася гэтая старонка — націсніце «Адкрыць». Праграмы яшчэ няма — «Усталяваць».',
           small: 'ZorkaTV — праграма для прагляду ТБ па вашай падпісцы. Час — па Мінску.', bad: 'Спасылка няпоўная або састарэла.' },
-    en: { prog: 'Programme', live: 'Live channel', rec: 'Recording', title: 'ZorkaTV link', open: 'Open in ZorkaTV',
-          note: 'If the app is installed, the link opens in it right away. If you see this page, tap the button.',
+    en: { prog: 'Programme', live: 'Live channel', rec: 'Recording', title: 'ZorkaTV link', open: 'Open in ZorkaTV', install: 'Install ZorkaTV',
+          device: 'ZorkaTV runs on iPhone, iPad and Macs with Apple silicon. Open this link on one of them.',
+          note: 'If the app is installed, the link opens in it right away. If you see this page, tap “Open”. No app yet? Tap “Install”.',
           small: 'ZorkaTV is an app for watching TV from your subscription. Times are Minsk time.', bad: 'The link is incomplete or out of date.' }
   };
   var t = T[lang] || T.ru;
@@ -146,6 +154,14 @@
   if (deep) { open.href = deep; } else { open.style.display = 'none'; }
   document.getElementById('note').textContent = deep ? t.note : '';
   document.getElementById('small').textContent = t.small;
+  // Where «Установить» leads: the site for now; the public TestFlight link, later the App Store page.
+  var INSTALL_URL = '/';
+  var install = document.getElementById('install');
+  install.textContent = t.install;
+  install.href = INSTALL_URL;
+  var ua = navigator.userAgent || '';
+  var apple = /iPhone|iPad|iPod|Macintosh/.test(ua);
+  document.getElementById('device').textContent = apple ? '' : t.device;
   document.documentElement.lang = T[lang] ? lang : 'ru';
 })();
 </script>
