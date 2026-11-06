@@ -3,30 +3,736 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ZorkaTV</title>
-<meta name="description" content="ZorkaTV — приложение для iPhone, iPad и Mac для просмотра ТВ по вашей подписке: эфир, архив, программа передач.">
+<title>ZorkaTV — эфир, архив и программа ZALA на iPhone, iPad и Mac</title>
+<meta name="description" content="Красивое приложение для iPhone, iPad и Mac, чтобы смотреть ZALA по своей подписке: эфир с превью, архив с продолжением просмотра, программа передач с напоминаниями.">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#05060F">
+<link rel="canonical" href="https://zorkatv.github.io/">
+<link rel="alternate" hreflang="ru" href="https://zorkatv.github.io/">
+<link rel="alternate" hreflang="be" href="https://zorkatv.github.io/?lang=be">
+<link rel="alternate" hreflang="en" href="https://zorkatv.github.io/?lang=en">
+<link rel="alternate" hreflang="x-default" href="https://zorkatv.github.io/">
 <link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ZorkaTV">
+<meta property="og:url" content="https://zorkatv.github.io/">
+<meta property="og:title" content="ZorkaTV — эфир, архив и программа ZALA">
+<meta property="og:description" content="Красивое приложение для iPhone, iPad и Mac, чтобы смотреть ZALA по своей подписке.">
+<meta property="og:image" content="https://zorkatv.github.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Иконка ZorkaTV на рассветном небе">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:locale:alternate" content="be_BY">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
 <style>
-  * { box-sizing: border-box; }
-  html, body { margin: 0; min-height: 100%; }
-  body {
-    min-height: 100vh; color: #F4F4F6; font-family: -apple-system, system-ui, "Helvetica Neue", Arial, sans-serif;
-    background: linear-gradient(180deg, #05060F 0%, #0B1030 38%, #2A1C3A 62%, #7A3B2A 82%, #E0873A 100%) fixed;
-    display: flex; align-items: center; justify-content: center; padding: 24px 16px; text-align: center;
+:root {
+  --bg: #0B0B0F; --bg2: #101016;
+  --text: #F4F4F6; --sec: #A1A1AA; --ter: #8A8A94;
+  --accent: #FFB547; --accent-text: #FFB547; --on-accent: #1A1206; --live: #E5484D;
+  --glass: rgba(28, 28, 38, 0.55); --glass-strong: rgba(20, 20, 30, 0.72);
+  --hairline: rgba(255, 255, 255, 0.10); --highlight: rgba(255, 255, 255, 0.10);
+  --shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.7);
+  --frame: linear-gradient(145deg, #3a3a42, #17171c 40%, #0d0d11);
+  --sans: -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --display: -apple-system, BlinkMacSystemFont, system-ui, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius: 26px; --gutter: 20px; --max: 1140px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #F5F5F7; --bg2: #ECECF0;
+    --text: #1C1C1E; --sec: #5C5C66; --ter: #6B6B76;
+    --accent-text: #A86400; --live: #D92D33;
+    --glass: rgba(255, 255, 255, 0.66); --glass-strong: rgba(255, 255, 255, 0.82);
+    --hairline: rgba(20, 20, 40, 0.09); --highlight: rgba(255, 255, 255, 0.9);
+    --shadow: 0 24px 60px -28px rgba(40, 30, 60, 0.35);
+    color-scheme: light;
   }
-  main { max-width: 520px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
-  img { width: 96px; height: 96px; border-radius: 22px; box-shadow: 0 16px 40px rgba(0,0,0,0.45); }
-  h1 { margin: 0; font-size: 40px; font-weight: 800; letter-spacing: -0.5px; }
-  p { margin: 0; color: #C9C9D6; font-size: 17px; line-height: 1.5; }
-  .small { color: #8A8A94; font-size: 13px; }
+}
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 80px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font: 17px/1.5 var(--sans); -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+img { max-width: 100%; }
+a { color: inherit; }
+h1, h2, h3 { font-family: var(--display); margin: 0; }
+p { margin: 0; }
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left)); }
+.skip { position: absolute; left: -9999px; top: 8px; z-index: 100; padding: 10px 14px; border-radius: 12px; background: var(--accent); color: var(--on-accent); }
+.skip:focus { left: 12px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 8px; }
+
+/* Glass */
+.glass {
+  background: var(--glass); border: 1px solid var(--hairline);
+  -webkit-backdrop-filter: blur(22px) saturate(160%); backdrop-filter: blur(22px) saturate(160%);
+  box-shadow: inset 0 1px 0 var(--highlight), var(--shadow);
+}
+
+/* Header */
+.top { position: fixed; inset: 0 0 auto 0; z-index: 50; padding: 10px 0; padding-top: max(10px, env(safe-area-inset-top)); }
+.bar { display: flex; align-items: center; gap: 12px; height: 52px; padding: 0 8px 0 10px; border-radius: 20px; color: #F4F4F6;
+  background: rgba(12, 12, 22, 0.42); border: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(20px) saturate(160%); backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10); transition: background .3s, color .3s, border-color .3s; }
+.scrolled .bar { background: var(--glass-strong); color: var(--text); border-color: var(--hairline); box-shadow: inset 0 1px 0 var(--highlight), 0 10px 30px -18px rgba(0,0,0,.5); }
+.brand { display: flex; align-items: center; gap: 9px; font: 700 18px/1 var(--display); letter-spacing: -0.2px; text-decoration: none; }
+.brand img { width: 32px; height: 32px; border-radius: 8px; }
+.nav { display: none; gap: 2px; margin-left: auto; }
+.nav a { padding: 8px 12px; border-radius: 12px; text-decoration: none; font-size: 15px; opacity: .82; }
+.nav a:hover { opacity: 1; background: rgba(127, 127, 127, 0.14); }
+.lang { margin-left: auto; display: flex; padding: 3px; border-radius: 14px; background: rgba(127, 127, 127, 0.16); }
+.lang button { appearance: none; border: 0; background: none; color: inherit; font: 600 13px/1 var(--sans); letter-spacing: .4px; padding: 8px 10px; border-radius: 11px; cursor: pointer; opacity: .75; min-width: 40px; min-height: 32px; }
+.lang button:hover { opacity: 1; }
+.lang button[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); opacity: 1; }
+@media (min-width: 860px) { .nav { display: flex; } .lang { margin-left: 8px; } }
+
+/* Hero: the sky of the sign-in screen «Заря», the same in both themes */
+.hero { position: relative; isolation: isolate; color: #F4F4F6; overflow: hidden;
+  padding: calc(120px + env(safe-area-inset-top)) 0 120px;
+  background: linear-gradient(180deg, #05060F 0%, #0B1030 34%, #2A1C3A 56%, #7A3B2A 74%, #E0873A 88%, #FFB547 100%); }
+.hero::after { content: ""; position: absolute; inset: auto 0 0 0; height: 160px; z-index: -1; background: linear-gradient(180deg, transparent, var(--bg)); }
+.stars { position: absolute; inset: 0 0 45% 0; z-index: -2; opacity: .8;
+  background-image:
+    radial-gradient(1.5px 1.5px at 8% 18%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 22% 8%, #fff 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 35% 26%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 48% 12%, #fff 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 63% 22%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 74% 6%, #fff 50%, transparent 51%),
+    radial-gradient(1.3px 1.3px at 86% 30%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 93% 14%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 15% 40%, #fff 50%, transparent 51%), radial-gradient(1.2px 1.2px at 56% 42%, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 80% 48%, #fff 50%, transparent 51%), radial-gradient(1px 1px at 4% 58%, #fff 50%, transparent 51%); }
+.sun { position: absolute; z-index: -1; left: 50%; bottom: 0; width: clamp(720px, 120vw, 1600px); aspect-ratio: 1; transform: translate(-50%, 58%); border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 214, 140, 0.85), rgba(255, 181, 71, 0.45) 42%, rgba(255, 181, 71, 0) 72%); }
+.hero-grid { display: grid; gap: 56px; align-items: center; }
+.hero-copy { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; color: #F4F4F6;
+  background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.hero-icon { width: 92px; height: 92px; border-radius: 22px; box-shadow: 0 0 0 1px rgba(255,255,255,.14), 0 18px 44px rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 181, 71, 0.25); }
+.hero h1 { font-size: clamp(48px, 11vw, 84px); line-height: .98; font-weight: 800; letter-spacing: -0.03em; }
+.hero h1 span { background: linear-gradient(100deg, #FFF3D6 10%, #FFB547 60%, #E0663A); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pitch { font-size: clamp(19px, 2.6vw, 23px); line-height: 1.4; color: #E4E2EC; max-width: 30ch; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 6px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 22px; border-radius: 18px; font: 650 17px/1 var(--sans); text-decoration: none; }
+.btn-primary { background: linear-gradient(180deg, #FFC56E, #FFB547 60%, #F2A12F); color: var(--on-accent); box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 14px 34px -10px rgba(255, 160, 50, 0.65); cursor: default; }
+.btn-primary svg { width: 20px; height: 20px; }
+.btn-ghost { color: #F4F4F6; background: rgba(255, 255, 255, 0.10); border: 1px solid rgba(255, 255, 255, 0.18); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.16); }
+.hero-note { font-size: 14px; color: #D8D3DE; max-width: 36ch; }
+.hero-visual { position: relative; display: flex; justify-content: center; }
+.hero-visual .phone { width: min(300px, 74vw); }
+.float-chip { position: absolute; display: inline-flex; align-items: center; gap: 8px; padding: 9px 13px; border-radius: 16px; font: 700 13px/1 var(--sans); letter-spacing: .4px; color: #F4F4F6;
+  background: rgba(20, 20, 32, 0.55); border: 1px solid rgba(255, 255, 255, 0.16); -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14), 0 14px 30px -12px rgba(0,0,0,.6); }
+.float-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: #E5484D; box-shadow: 0 0 10px #E5484D; }
+.float-chip.c1 { top: 16%; left: calc(50% - min(300px, 74vw) / 2 - 24px); }
+.float-chip.c2 { bottom: 20%; right: calc(50% - min(300px, 74vw) / 2 - 22px); }
+.float-chip .res { padding: 4px 7px; border-radius: 8px; background: rgba(255,255,255,.14); }
+.float-chip .amber { color: #FFB547; }
+@media (max-width: 420px) { .float-chip.c1 { left: 4px; } .float-chip.c2 { right: 4px; } }
+@media (min-width: 960px) {
+  .hero { padding-bottom: 140px; }
+  .hero-grid { grid-template-columns: 1.1fr 0.9fr; gap: 40px; }
+  .hero-copy { text-align: left; align-items: flex-start; }
+  .cta { justify-content: flex-start; }
+  .float-chip.c1 { left: 2%; } .float-chip.c2 { right: 4%; }
+}
+
+/* Device frames: the screenshot sets the shape, the frame follows it. Sizes are in cqi of the frame itself. */
+.device { position: relative; isolation: isolate; container-type: inline-size; }
+.device::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: var(--fr); background: var(--frame);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.14), inset 0 0 0 2px rgba(0,0,0,.6), 0 40px 80px -30px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(0,0,0,.25); }
+.device img { display: block; width: calc(100% - 2 * var(--bz)); height: auto; margin: var(--bz); border-radius: var(--sr); background: #0B0B0F; }
+.phone { --fr: 17cqi; --bz: 3.4cqi; --sr: 13.8cqi; }
+.phone::after { content: ""; position: absolute; left: 50%; top: 6cqi; width: 28cqi; height: 8.2cqi; transform: translateX(-50%); border-radius: 99px; background: #000; }
+.phone.land { --fr: 7.9cqi; --bz: 1.6cqi; --sr: 6.4cqi; }
+.phone.land::after { left: 2.8cqi; top: 50%; width: 3.8cqi; height: 13cqi; transform: translateY(-50%); }
+.tablet { --fr: 4.4cqi; --bz: 2.4cqi; --sr: 2.2cqi; }
+.tablet::after { content: ""; position: absolute; left: 50%; top: 1.05cqi; width: .7cqi; height: .7cqi; transform: translateX(-50%); border-radius: 50%; background: #1f2433; box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
+.duo { --fr: 6cqi; --bz: 2.4cqi; --sr: 4.2cqi; }
+.duo::after { content: ""; position: absolute; pointer-events: none; top: var(--bz); bottom: var(--bz); left: 50%; width: 3.2cqi; transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.07) 35%, rgba(0,0,0,.22) 50%, rgba(255,255,255,.07) 65%, transparent); }
+.duo.half::after { top: 50%; bottom: auto; left: var(--bz); right: var(--bz); width: auto; height: 3.2cqi; transform: translateY(-50%);
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.07) 35%, rgba(0,0,0,.22) 50%, rgba(255,255,255,.07) 65%, transparent); }
+
+/* Sections */
+section { position: relative; }
+.section { padding: 84px 0; }
+.head { max-width: 680px; margin: 0 auto 40px; text-align: center; display: grid; gap: 12px; }
+.kicker { font: 700 13px/1 var(--sans); letter-spacing: 1.4px; text-transform: uppercase; color: var(--accent-text); }
+.head h2 { font-size: clamp(32px, 5.4vw, 48px); line-height: 1.06; font-weight: 800; letter-spacing: -0.025em; }
+.head p { color: var(--sec); font-size: 18px; }
+
+/* Screens */
+.strip { display: flex; gap: 28px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 12px var(--gutter) 28px; margin: 0 calc(-1 * var(--gutter));
+  scrollbar-width: thin; scrollbar-color: var(--hairline) transparent; -webkit-overflow-scrolling: touch; }
+.strip::-webkit-scrollbar { height: 6px; } .strip::-webkit-scrollbar-thumb { background: var(--hairline); border-radius: 9px; }
+.shot { margin: 0; flex: 0 0 auto; scroll-snap-align: center; display: grid; gap: 16px; justify-items: center; }
+.strip .shot { width: clamp(200px, 58vw, 246px); }
+.shot .device { width: 100%; }
+figcaption { font-size: 15px; color: var(--sec); text-align: center; max-width: 34ch; line-height: 1.4; }
+@media (min-width: 1180px) { .strip { justify-content: center; overflow: visible; gap: 22px; } .strip .shot { width: 160px; } }
+.wide { display: grid; gap: 44px 32px; margin-top: 44px; }
+@media (min-width: 700px) { .wide { grid-template-columns: 1fr 1fr; align-items: end; } .wide .span { grid-column: 1 / -1; } }
+.wide .span .device { max-width: 860px; margin: 0 auto; }
+.duo-pair { display: grid; grid-template-columns: 2.02fr 1fr; gap: 24px; align-items: end; }
+.duo-pair .shot { width: 100%; }
+
+/* Features */
+.features { background: radial-gradient(1000px 340px at 50% 340px, rgba(255, 181, 71, 0.07), transparent 70%); }
+.grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.card { border-radius: var(--radius); padding: 26px 24px 24px; display: flex; flex-direction: column; gap: 14px; }
+.card .ic { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; color: var(--on-accent);
+  background: linear-gradient(160deg, #FFD08A, #FFB547 55%, #E0873A); box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 8px 20px -8px rgba(255, 150, 40, 0.6); }
+.card .ic svg { width: 24px; height: 24px; }
+.card h3 { font-size: 22px; letter-spacing: -0.01em; }
+.card ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+.card li { position: relative; padding-left: 20px; color: var(--sec); font-size: 16px; line-height: 1.45; }
+.card li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); opacity: .9; }
+.genres { display: flex; gap: 6px; margin-top: auto; padding-top: 4px; }
+.genres i { width: 14px; height: 14px; border-radius: 50%; display: block; box-shadow: inset 0 0 0 1px rgba(0,0,0,.15); }
+
+/* Devices */
+.devices { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+.dev { border-radius: var(--radius); padding: 24px; display: grid; gap: 8px; align-content: start; }
+.dev svg { width: 40px; height: 40px; color: var(--accent-text); margin-bottom: 6px; }
+.dev h3 { font-size: 20px; }
+.dev p { color: var(--sec); font-size: 16px; }
+.need { margin-top: 18px; border-radius: var(--radius); padding: 26px; display: flex; gap: 18px; align-items: flex-start;
+  background: linear-gradient(135deg, rgba(255, 181, 71, 0.16), rgba(224, 102, 58, 0.08)), var(--glass); }
+.need svg { flex: 0 0 auto; width: 30px; height: 30px; color: var(--accent-text); margin-top: 2px; }
+.need h3 { font-size: 20px; margin-bottom: 6px; }
+.need p { color: var(--sec); }
+
+/* Privacy */
+.privacy-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); }
+.priv { border-radius: var(--radius); padding: 24px; display: grid; gap: 10px; align-content: start; }
+.priv svg { width: 28px; height: 28px; color: var(--accent-text); }
+.priv h3 { font-size: 19px; }
+.priv p { color: var(--sec); font-size: 16px; }
+
+/* Footer */
+footer { padding: 56px 0 calc(40px + env(safe-area-inset-bottom)); border-top: 1px solid var(--hairline); background: var(--bg2); }
+.foot { display: grid; gap: 22px; }
+.foot .brand { font-size: 20px; }
+.disclaimer { color: var(--sec); font-size: 15px; max-width: 72ch; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; font-size: 15px; }
+.foot-links a { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--accent-text); font-weight: 600; }
+.foot-links a:hover { text-decoration: underline; }
+.foot-links svg { width: 18px; height: 18px; }
+.fine { color: var(--ter); font-size: 13px; }
+
+/* Motion, only for those who want it */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .sun { animation: breathe 9s ease-in-out infinite alternate; }
+  .stars { animation: twinkle 6s ease-in-out infinite alternate; }
+  .hero-visual .phone { animation: float 7s ease-in-out infinite alternate; }
+  .float-chip.c1 { animation: float 6s ease-in-out -2s infinite alternate; }
+  .float-chip.c2 { animation: float 8s ease-in-out -4s infinite alternate; }
+  .hero-copy > * { animation: rise .8s cubic-bezier(.2,.7,.2,1) both; }
+  .hero-copy > :nth-child(2) { animation-delay: .06s; } .hero-copy > :nth-child(3) { animation-delay: .12s; }
+  .hero-copy > :nth-child(4) { animation-delay: .18s; } .hero-copy > :nth-child(5) { animation-delay: .24s; } .hero-copy > :nth-child(6) { animation-delay: .3s; }
+  .card, .dev, .priv { transition: transform .35s cubic-bezier(.2,.7,.2,1); }
+  .card:hover, .dev:hover, .priv:hover { transform: translateY(-3px); }
+  @keyframes breathe { from { transform: translate(-50%, 58%) scale(1); opacity: .9; } to { transform: translate(-50%, 58%) scale(1.06); opacity: 1; } }
+  @keyframes twinkle { from { opacity: .55; } to { opacity: .9; } }
+  @keyframes float { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+}
 </style>
 </head>
 <body>
-<main>
-  <img src="/icon.svg" alt="Иконка ZorkaTV">
-  <h1>ZorkaTV</h1>
-  <p>Эфир, архив и программа передач по вашей подписке — на iPhone, iPad и Mac.</p>
-  <p class="small">Скоро в App Store.</p>
+<a class="skip" href="#main" data-i="skip">К содержимому</a>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-live" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="2.2" fill="currentColor"/><path d="M8.2 15.8a5.4 5.4 0 0 1 0-7.6M15.8 8.2a5.4 5.4 0 0 1 0 7.6M5.2 18.8a9.6 9.6 0 0 1 0-13.6M18.8 5.2a9.6 9.6 0 0 1 0 13.6"/></g></symbol>
+    <symbol id="i-guide" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="3.5"/><path d="M3 9.5h18M8 3v3M16 3v3M7 13.5h4M13 13.5h4M7 17h6"/></g></symbol>
+    <symbol id="i-archive" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 12a8.4 8.4 0 1 0 2.5-6"/><path d="M3.5 3.8V8h4.2"/><path d="M12 7.6V12l3 2"/></g></symbol>
+    <symbol id="i-player" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2.5" y="4.5" width="19" height="13" rx="3"/><path d="M10 8.3v5.4l4.6-2.7z" fill="currentColor"/><path d="M8 21h8" stroke-linecap="round"/></g></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></g></symbol>
+    <symbol id="i-wide" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="2.5" y="4" width="15" height="12" rx="2.5"/><rect x="14.5" y="9" width="7" height="12" rx="2"/><path d="M8 20h4" stroke-linecap="round"/></g></symbol>
+    <symbol id="i-palette" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-1 1.6-2.1-.5-1.3.3-2.4 1.7-2.4H18a3 3 0 0 0 3-3C21 7 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.3" fill="currentColor"/><circle cx="10.5" cy="7" r="1.3" fill="currentColor"/><circle cx="15.5" cy="7.5" r="1.3" fill="currentColor"/></g></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3-3a4.5 4.5 0 0 0-6.4-6.4l-1 1"/><path d="M14 10a4.5 4.5 0 0 0-6.4 0l-3 3a4.5 4.5 0 0 0 6.4 6.4l1-1"/></g></symbol>
+    <symbol id="i-megaphone" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10v4a1 1 0 0 0 1 1h2l5 4V5L6 9H4a1 1 0 0 0-1 1z"/><path d="M15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/></g></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/></g></symbol>
+    <symbol id="i-phone" viewBox="0 0 40 40"><g fill="none" stroke="currentColor" stroke-width="2.4"><rect x="11" y="3" width="18" height="34" rx="5"/><path d="M17.5 7.5h5" stroke-linecap="round"/></g></symbol>
+    <symbol id="i-tablet" viewBox="0 0 40 40"><g fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="4" width="30" height="32" rx="4.5"/><circle cx="20" cy="7.6" r=".9" fill="currentColor" stroke="none"/></g></symbol>
+    <symbol id="i-duo" viewBox="0 0 40 40"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"><rect x="4" y="7" width="32" height="26" rx="4.5"/><path d="M20 7v26" stroke-dasharray="2.4 2.6"/></g></symbol>
+    <symbol id="i-mac" viewBox="0 0 40 40"><g fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"><rect x="7" y="7" width="26" height="18" rx="2.5"/><path d="M3 31h34l-2.5-3.5h-29z"/></g></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4" fill="currentColor"/></g></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A10 10 0 0 1 12 5c5 0 8.4 4.3 9.5 6-.5.8-1.4 2-2.6 3.2M6.4 6.5C4.6 7.8 3.2 9.6 2.5 11c1.1 1.7 4.5 6 9.5 6 1.6 0 3-.4 4.3-1.1"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></g></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M12 3l7.5 3v5.5c0 4.6-3.2 8.2-7.5 9.5-4.3-1.3-7.5-4.9-7.5-9.5V6z"/><path d="M8.8 12.2l2.2 2.2 4.4-4.6"/></g></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="M7 18.5h10.5a4 4 0 0 0 .6-8 6 6 0 0 0-11.6 1.3A3.4 3.4 0 0 0 7 18.5z"/><path d="M12 15.5v-5M9.8 12.6 12 10.4l2.2 2.2"/></g></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2.5a2 2 0 0 0 0 3V16a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2.5a2 2 0 0 0 0-3z"/><path d="M14.5 6.5v11" stroke-dasharray="1.8 2"/></g></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2.2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 3 .8.1-.6.3-1.1.6-1.3-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.8 1a9.6 9.6 0 0 1 5 0c1.9-1.3 2.8-1 2.8-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.7-4.6 5 .4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2.2z"/></symbol>
+  </defs>
+</svg>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="bar">
+      <a class="brand" href="#main"><img src="/icon.svg" alt="" width="32" height="32">ZorkaTV</a>
+      <nav class="nav" aria-label="Разделы" data-ia="aria-label:nav.label">
+        <a href="#screens" data-i="nav.screens">Экраны</a>
+        <a href="#features" data-i="nav.features">Возможности</a>
+        <a href="#devices" data-i="nav.devices">Устройства</a>
+        <a href="#privacy" data-i="nav.privacy">Приватность</a>
+      </nav>
+      <div class="lang" role="group" aria-label="Язык · Мова · Language">
+        <button type="button" data-lang="ru" lang="ru" aria-label="Русский" aria-pressed="true">RU</button>
+        <button type="button" data-lang="be" lang="be" aria-label="Беларуская" aria-pressed="false">BE</button>
+        <button type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="stars" aria-hidden="true"></div>
+    <div class="sun" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <img class="hero-icon" src="/icon.svg" alt="" width="92" height="92">
+        <span class="eyebrow" data-i="hero.eyebrow">Для iPhone, iPad и Mac</span>
+        <h1 id="hero-title"><span>ZorkaTV</span></h1>
+        <p class="pitch" data-i="hero.pitch">Эфир, архив и программа передач ZALA — по вашей подписке, красиво и без лишнего.</p>
+        <div class="cta">
+          <span class="btn btn-primary"><svg aria-hidden="true"><use href="#i-clock"/></svg><span data-i="hero.cta">Скоро в TestFlight</span></span>
+          <a class="btn btn-ghost" href="#features" data-i="hero.more">Что умеет</a>
+        </div>
+        <p class="hero-note" data-i="hero.note">Нужна своя подписка ZALA. Приложение не связано с оператором.</p>
+      </div>
+      <div class="hero-visual">
+        <div class="device phone">
+          <img src="shots/iphone-now.jpg" width="754" height="1640" alt="Экран «Эфир» на iPhone: превью канала и список каналов" data-ia="alt:alt.now" fetchpriority="high">
+        </div>
+        <span class="float-chip c1" aria-hidden="true"><span class="dot"></span><span data-i="chip.live">ЭФИР</span><span class="res">1080p</span></span>
+        <span class="float-chip c2" aria-hidden="true"><span class="amber" data-i="chip.resume">Продолжаем с 34:10</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="screens" aria-labelledby="screens-title">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="kicker" data-i="screens.kicker">Экраны</span>
+        <h2 id="screens-title" data-i="screens.title">Как это выглядит</h2>
+        <p data-i="screens.lead">Тёмные экраны, янтарный акцент и стеклянные панели поверх видео.</p>
+      </div>
+      <div class="strip reveal" tabindex="0" role="region" aria-label="Экраны iPhone" data-ia="aria-label:screens.strip">
+        <figure class="shot"><div class="device phone"><img src="shots/iphone-now.jpg" width="754" height="1640" loading="lazy" decoding="async" alt="Экран «Эфир» на iPhone: превью канала и список каналов" data-ia="alt:alt.now"></div><figcaption data-i="cap.now">«Эфир»: превью и «Продолжить просмотр»</figcaption></figure>
+        <figure class="shot"><div class="device phone"><img src="shots/iphone-guide.jpg" width="754" height="1640" loading="lazy" decoding="async" alt="Сетка программы передач на iPhone" data-ia="alt:alt.guide"></div><figcaption data-i="cap.guide">Программа по каналам и дням</figcaption></figure>
+        <figure class="shot"><div class="device phone"><img src="shots/iphone-player.jpg" width="754" height="1640" loading="lazy" decoding="async" alt="Плеер на iPhone с описанием передачи" data-ia="alt:alt.player"></div><figcaption data-i="cap.player">Плеер с описанием передачи</figcaption></figure>
+        <figure class="shot"><div class="device phone"><img src="shots/iphone-sheet.jpg" width="754" height="1640" loading="lazy" decoding="async" alt="Панель передачи на iPhone" data-ia="alt:alt.sheet"></div><figcaption data-i="cap.sheet">Панель передачи: напомнить, поделиться</figcaption></figure>
+        <figure class="shot"><div class="device phone"><img src="shots/iphone-search.jpg" width="754" height="1640" loading="lazy" decoding="async" alt="Поиск на iPhone" data-ia="alt:alt.search"></div><figcaption data-i="cap.search">Поиск по каналам и программе</figcaption></figure>
+        <figure class="shot"><div class="device phone"><img src="shots/iphone-themes.jpg" width="754" height="1640" loading="lazy" decoding="async" alt="Выбор темы на iPhone" data-ia="alt:alt.themes"></div><figcaption data-i="cap.themes">Шесть тем на выбор</figcaption></figure>
+      </div>
+      <div class="wide">
+        <figure class="shot span reveal"><div class="device phone land"><img src="shots/iphone-landscape-player.jpg" width="1640" height="754" loading="lazy" decoding="async" alt="Плеер на iPhone горизонтально, во весь экран" data-ia="alt:alt.land"></div><figcaption data-i="cap.land">Во весь экран — со стеклянными панелями</figcaption></figure>
+        <figure class="shot reveal"><div class="device tablet"><img src="shots/ipad-now.jpg" width="1640" height="1230" loading="lazy" decoding="async" alt="Экран «Эфир» на iPad в две колонки" data-ia="alt:alt.ipad"></div><figcaption data-i="cap.ipad">iPad: список и большое превью рядом</figcaption></figure>
+        <figure class="shot reveal"><div class="device tablet"><img src="shots/ipad-player.jpg" width="1640" height="1230" loading="lazy" decoding="async" alt="Плеер на iPad с программой канала справа" data-ia="alt:alt.ipadPlayer"></div><figcaption data-i="cap.ipadPlayer">iPad: плеер и программа канала</figcaption></figure>
+        <div class="span duo-pair reveal">
+          <figure class="shot"><div class="device duo"><img src="shots/duo-open.jpg" width="1640" height="1154" loading="lazy" decoding="async" alt="iPhone Duo в раскрытом виде: две колонки по сгибу" data-ia="alt:alt.duoOpen"></div><figcaption data-i="cap.duoOpen">iPhone Duo раскрыт: колонки сходятся у сгиба</figcaption></figure>
+          <figure class="shot"><div class="device duo half"><img src="shots/duo-tabletop.jpg" width="1154" height="1640" loading="lazy" decoding="async" alt="iPhone Duo полусложен: видео сверху, кнопки снизу" data-ia="alt:alt.duoHalf"></div><figcaption data-i="cap.duoHalf">Полусложен: видео сверху, кнопки снизу</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section features" id="features" aria-labelledby="features-title">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="kicker" data-i="features.kicker">Возможности</span>
+        <h2 id="features-title" data-i="features.title">Что умеет ZorkaTV</h2>
+        <p data-i="features.lead">Всё, чтобы смотреть телевизор с удовольствием — дома и в дороге.</p>
+      </div>
+      <div class="grid">
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-live"/></svg></span>
+          <h3 data-i="f.live.t">Эфир</h3>
+          <ul>
+            <li data-i="f.live.1">Превью канала прямо над списком, без звука. Открывается тот канал, что смотрели в прошлый раз.</li>
+            <li data-i="f.live.2">Категории, избранное, свой порядок и скрытые каналы.</li>
+            <li data-i="f.live.3">У каждой передачи — полоска цвета её жанра и «ещё 25 мин».</li>
+            <li data-i="f.live.4">Пауза в эфире: продолжите с того же места, а «В эфир» вернёт к прямой трансляции.</li>
+          </ul>
+        </article>
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-guide"/></svg></span>
+          <h3 data-i="f.guide.t">Программа</h3>
+          <ul>
+            <li data-i="f.guide.1">Сетка передач всех каналов — от начала архива до завтра.</li>
+            <li data-i="f.guide.2">Панель передачи: описание, жанр, возраст и что будет дальше.</li>
+            <li data-i="f.guide.3">Напоминания за 5 минут до начала: нажали на уведомление — и вы на канале.</li>
+          </ul>
+        </article>
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-archive"/></svg></span>
+          <h3 data-i="f.archive.t">Архив</h3>
+          <ul>
+            <li data-i="f.archive.1">Пропустили передачу — смотрите её в записи. Идущую можно начать с начала.</li>
+            <li data-i="f.archive.2">Продолжение с того места, где остановились: «Продолжаем с 34:10 · С начала».</li>
+            <li data-i="f.archive.3">Недосмотренное ждёт в строке «Продолжить просмотр».</li>
+            <li data-i="f.archive.4">Следующая передача включается сама; скорость записи — от 0,75× до 2×.</li>
+          </ul>
+        </article>
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-player"/></svg></span>
+          <h3 data-i="f.player.t">Плеер</h3>
+          <ul>
+            <li data-i="f.player.1">«Картинка в картинке» и AirPlay — всегда под рукой.</li>
+            <li data-i="f.player.2">Качество: авто, высокое или экономия; выбор для канала запоминается, а метка «1080p» показывает, что идёт на самом деле.</li>
+            <li data-i="f.player.3">Звуковые дорожки и субтитры — там, где канал их даёт.</li>
+            <li data-i="f.player.4">Таймер сна от 15 минут до 2 часов, с предупреждением за минуту.</li>
+            <li data-i="f.player.5">Перерыв в вещании: видно, до какого времени, и можно смотреть из архива.</li>
+          </ul>
+        </article>
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-search"/></svg></span>
+          <h3 data-i="f.search.t">Поиск</h3>
+          <ul>
+            <li data-i="f.search.1">Каналы и передачи вместе: «Сейчас в эфире», «В архиве», «Скоро».</li>
+            <li data-i="f.search.2">Наберите номер, например «53», — нужный канал окажется первым.</li>
+            <li data-i="f.search.3">«Что идёт сейчас» по жанрам и недавние запросы.</li>
+          </ul>
+        </article>
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-wide"/></svg></span>
+          <h3 data-i="f.wide.t">iPad, iPhone Duo и Mac</h3>
+          <ul>
+            <li data-i="f.wide.1">На широком экране — две колонки: список рядом с большим превью, плеер рядом с программой канала.</li>
+            <li data-i="f.wide.2">iPhone Duo: колонки сходятся у сгиба, а в полусложенном виде видео сверху, кнопки снизу.</li>
+            <li data-i="f.wide.3">Клавиатура и мышь: пробел — пауза, стрелки — перемотка и каналы, цифры — номер канала, ⌘F — поиск.</li>
+            <li data-i="f.wide.4">Окно любого размера, Split View, Stage Manager — раскладка меняется на лету, видео не прерывается.</li>
+          </ul>
+        </article>
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-palette"/></svg></span>
+          <h3 data-i="f.style.t">Под себя</h3>
+          <ul>
+            <li data-i="f.style.1">Шесть тем: Системная, Тёмная, Кобальт, Графит, Светлая, Песочная.</li>
+            <li data-i="f.style.2">Размер шрифта: системный, мелкий, средний или крупный.</li>
+            <li data-i="f.style.3">Восемь жанров со своими цветами — любой можно поменять.</li>
+            <li data-i="f.style.4">Русский, беларуская, English — язык меняется сразу, без перезапуска.</li>
+            <li data-i="f.style.5">Резервная копия настроек в файл или iCloud — когда вы сами захотите.</li>
+          </ul>
+          <div class="genres" aria-hidden="true"><i style="background:#5AA9FF"></i><i style="background:#B794F6"></i><i style="background:#4ADE80"></i><i style="background:#F472B6"></i><i style="background:#2DD4BF"></i><i style="background:#FACC15"></i><i style="background:#FB923C"></i><i style="background:#A1A1AA"></i></div>
+        </article>
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-link"/></svg></span>
+          <h3 data-i="f.links.t">Ссылки и Handoff</h3>
+          <ul>
+            <li data-i="f.links.1">Поделитесь передачей короткой ссылкой — она откроет её прямо в ZorkaTV.</li>
+            <li data-i="f.links.2">Handoff: начали смотреть на iPhone — продолжите на iPad или Mac с того же места.</li>
+          </ul>
+        </article>
+        <article class="card glass reveal">
+          <span class="ic"><svg aria-hidden="true"><use href="#i-megaphone"/></svg></span>
+          <h3 data-i="f.news.t">Объявления оператора</h3>
+          <ul>
+            <li data-i="f.news.1">Важное от оператора проезжает один раз бегущей строкой вверху «Эфира».</li>
+            <li data-i="f.news.2">Не нужно — выключите в настройках.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="devices" aria-labelledby="devices-title">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="kicker" data-i="devices.kicker">Устройства</span>
+        <h2 id="devices-title" data-i="devices.title">Где работает</h2>
+        <p data-i="devices.lead">Одно приложение — для телефона, планшета и компьютера.</p>
+      </div>
+      <div class="devices">
+        <div class="dev glass reveal"><svg aria-hidden="true"><use href="#i-phone"/></svg><h3>iPhone</h3><p data-i="dev.iphone">iOS 17 и новее</p></div>
+        <div class="dev glass reveal"><svg aria-hidden="true"><use href="#i-tablet"/></svg><h3>iPad</h3><p data-i="dev.ipad">iPadOS 17 и новее</p></div>
+        <div class="dev glass reveal"><svg aria-hidden="true"><use href="#i-duo"/></svg><h3>iPhone Duo</h3><p data-i="dev.duo">Своя раскладка в раскрытом и полусложенном виде</p></div>
+        <div class="dev glass reveal"><svg aria-hidden="true"><use href="#i-mac"/></svg><h3>Mac</h3><p data-i="dev.mac">Mac с чипом Apple — как приложение для iPad</p></div>
+      </div>
+      <div class="need glass reveal">
+        <svg aria-hidden="true"><use href="#i-ticket"/></svg>
+        <div>
+          <h3 data-i="need.t">Нужна своя подписка ZALA</h3>
+          <p data-i="need.p">Войдите с логином и паролем от вашей подписки — и смотрите каналы, которые в неё входят. ZorkaTV не продаёт подписку и не показывает каналы без неё.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="privacy" aria-labelledby="privacy-title">
+    <div class="wrap">
+      <div class="head reveal">
+        <span class="kicker" data-i="privacy.kicker">Приватность</span>
+        <h2 id="privacy-title" data-i="privacy.title">Ваше остаётся вашим</h2>
+        <p data-i="privacy.lead">У ZorkaTV нет своего сервера: каналы и программа приходят прямо от оператора.</p>
+      </div>
+      <div class="privacy-grid">
+        <div class="priv glass reveal"><svg aria-hidden="true"><use href="#i-eye"/></svg><h3 data-i="p.track.t">Никакой слежки</h3><p data-i="p.track.p">Нет рекламы и слежки между приложениями и сайтами. ZorkaTV не знает, кто вы.</p></div>
+        <div class="priv glass reveal"><svg aria-hidden="true"><use href="#i-key"/></svg><h3 data-i="p.login.t">Логин остаётся на устройстве</h3><p data-i="p.login.p">Логин и пароль хранятся в связке ключей только этого устройства и уходят только оператору при входе. В iCloud и в резервную копию они не попадают.</p></div>
+        <div class="priv glass reveal"><svg aria-hidden="true"><use href="#i-shield"/></svg><h3 data-i="p.crash.t">Отчёты о сбоях без личных данных</h3><p data-i="p.crash.p">Если что-то сломается, приложение отправит отчёт через Sentry — без логина, пароля, ключей входа и снимков экрана, не связанный с вами. Иногда туда же уходит, за сколько секунд открылся канал.</p></div>
+        <div class="priv glass reveal"><svg aria-hidden="true"><use href="#i-cloud"/></svg><h3 data-i="p.cloud.t">iCloud — только по кнопке</h3><p data-i="p.cloud.p">Настройки попадают в ваш iCloud, только когда вы сами нажмёте «Сохранить в iCloud».</p></div>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap foot">
+    <a class="brand" href="#main"><img src="/icon.svg" alt="" width="32" height="32">ZorkaTV</a>
+    <p class="disclaimer" data-i="foot.disclaimer">ZorkaTV — независимое приложение. Оно не связано с ZALA и Белтелекомом, не одобрено и не поддерживается ими. ZALA — товарный знак своего владельца; приложение лишь работает с вашей подпиской на этот сервис.</p>
+    <div class="foot-links">
+      <a href="https://github.com/ZorkaTV" rel="noopener"><svg aria-hidden="true"><use href="#i-github"/></svg><span data-i="foot.contact">Вопросы и предложения — на GitHub</span></a>
+    </div>
+    <p class="fine"><span data-i="foot.apple">iPhone, iPad, Mac, AirPlay и iCloud — товарные знаки Apple Inc.</span> © 2026 ZorkaTV</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  root.classList.add('js');
+  var T = {
+    be: {
+      'meta.title': 'ZorkaTV — эфір, архіў і праграма ZALA на iPhone, iPad і Mac',
+      'meta.desc': 'Прыгожы дадатак для iPhone, iPad і Mac, каб глядзець ZALA па сваёй падпісцы: эфір з папярэднім праглядам, архіў з працягам прагляду, праграма перадач з нагадваннямі.',
+      'skip': 'Да зместу',
+      'nav.label': 'Раздзелы', 'nav.screens': 'Экраны', 'nav.features': 'Магчымасці', 'nav.devices': 'Прылады', 'nav.privacy': 'Прыватнасць',
+      'hero.eyebrow': 'Для iPhone, iPad і Mac',
+      'hero.pitch': 'Эфір, архіў і праграма перадач ZALA — па вашай падпісцы, прыгожа і без лішняга.',
+      'hero.cta': 'Хутка ў TestFlight', 'hero.more': 'Што ўмее',
+      'hero.note': 'Патрэбна свая падпіска ZALA. Дадатак не звязаны з аператарам.',
+      'chip.live': 'ЭФІР', 'chip.resume': 'Працягваем з 34:10',
+      'screens.kicker': 'Экраны', 'screens.title': 'Як гэта выглядае',
+      'screens.lead': 'Цёмныя экраны, бурштынавы акцэнт і шкляныя панэлі па-над відэа.', 'screens.strip': 'Экраны iPhone',
+      'cap.now': '«Эфір»: папярэдні прагляд і «Працягнуць прагляд»', 'cap.guide': 'Праграма па каналах і днях',
+      'cap.player': 'Плеер з апісаннем перадачы', 'cap.sheet': 'Панэль перадачы: нагадаць, падзяліцца',
+      'cap.search': 'Пошук па каналах і праграме', 'cap.themes': 'Шэсць тэм на выбар',
+      'cap.land': 'На ўвесь экран — са шклянымі панэлямі', 'cap.ipad': 'iPad: спіс і вялікі папярэдні прагляд побач',
+      'cap.ipadPlayer': 'iPad: плеер і праграма канала', 'cap.duoOpen': 'iPhone Duo раскрыты: калонкі сыходзяцца ля згібу',
+      'cap.duoHalf': 'Напалову складзены: відэа зверху, кнопкі знізу',
+      'alt.now': 'Экран «Эфір» на iPhone: папярэдні прагляд канала і спіс каналаў', 'alt.guide': 'Сетка праграмы перадач на iPhone',
+      'alt.player': 'Плеер на iPhone з апісаннем перадачы', 'alt.sheet': 'Панэль перадачы на iPhone', 'alt.search': 'Пошук на iPhone',
+      'alt.themes': 'Выбар тэмы на iPhone', 'alt.land': 'Плеер на iPhone гарызантальна, на ўвесь экран',
+      'alt.ipad': 'Экран «Эфір» на iPad у дзве калонкі', 'alt.ipadPlayer': 'Плеер на iPad з праграмай канала справа',
+      'alt.duoOpen': 'iPhone Duo ў раскрытым выглядзе: дзве калонкі па згібе', 'alt.duoHalf': 'iPhone Duo напалову складзены: відэа зверху, кнопкі знізу',
+      'features.kicker': 'Магчымасці', 'features.title': 'Што ўмее ZorkaTV',
+      'features.lead': 'Усё, каб глядзець тэлевізар з задавальненнем — дома і ў дарозе.',
+      'f.live.t': 'Эфір',
+      'f.live.1': 'Папярэдні прагляд канала проста над спісам, без гуку. Адкрываецца той канал, які глядзелі мінулым разам.',
+      'f.live.2': 'Катэгорыі, абранае, свой парадак і схаваныя каналы.',
+      'f.live.3': 'У кожнай перадачы — палоска колеру яе жанру і «яшчэ 25 хв».',
+      'f.live.4': 'Паўза ў эфіры: працягніце з таго ж месца, а «У эфір» верне да прамой трансляцыі.',
+      'f.guide.t': 'Праграма',
+      'f.guide.1': 'Сетка перадач усіх каналаў — ад пачатку архіва да заўтра.',
+      'f.guide.2': 'Панэль перадачы: апісанне, жанр, узрост і што будзе далей.',
+      'f.guide.3': 'Нагадванні за 5 хвілін да пачатку: націснулі на апавяшчэнне — і вы на канале.',
+      'f.archive.t': 'Архіў',
+      'f.archive.1': 'Прапусцілі перадачу — глядзіце яе ў запісе. Тую, што ідзе, можна пачаць з пачатку.',
+      'f.archive.2': 'Працяг з таго месца, дзе спыніліся: «Працягваем з 34:10 · З пачатку».',
+      'f.archive.3': 'Недагледжанае чакае ў радку «Працягнуць прагляд».',
+      'f.archive.4': 'Наступная перадача ўключаецца сама; хуткасць запісу — ад 0,75× да 2×.',
+      'f.player.t': 'Плеер',
+      'f.player.1': '«Карцінка ў карцінцы» і AirPlay — заўсёды пад рукой.',
+      'f.player.2': 'Якасць: аўта, высокая або эканомія; выбар для канала запамінаецца, а метка «1080p» паказвае, што ідзе насамрэч.',
+      'f.player.3': 'Гукавыя дарожкі і субтытры — там, дзе канал іх дае.',
+      'f.player.4': 'Таймер сну ад 15 хвілін да 2 гадзін, з папярэджаннем за хвіліну.',
+      'f.player.5': 'Перапынак у вяшчанні: відаць, да якога часу, і можна глядзець з архіва.',
+      'f.search.t': 'Пошук',
+      'f.search.1': 'Каналы і перадачы разам: «Зараз у эфіры», «У архіве», «Хутка».',
+      'f.search.2': 'Набярыце нумар, напрыклад «53», — патрэбны канал апынецца першым.',
+      'f.search.3': '«Што ідзе зараз» па жанрах і нядаўнія запыты.',
+      'f.wide.t': 'iPad, iPhone Duo і Mac',
+      'f.wide.1': 'На шырокім экране — дзве калонкі: спіс побач з вялікім папярэднім праглядам, плеер побач з праграмай канала.',
+      'f.wide.2': 'iPhone Duo: калонкі сыходзяцца ля згібу, а ў напалову складзеным выглядзе відэа зверху, кнопкі знізу.',
+      'f.wide.3': 'Клавіятура і мыш: прабел — паўза, стрэлкі — перамотка і каналы, лічбы — нумар канала, ⌘F — пошук.',
+      'f.wide.4': 'Акно любога памеру, Split View, Stage Manager — раскладка мяняецца на хаду, відэа не перарываецца.',
+      'f.style.t': 'Пад сябе',
+      'f.style.1': 'Шэсць тэм: Сістэмная, Цёмная, Кобальт, Графіт, Светлая, Пясочная.',
+      'f.style.2': 'Памер шрыфту: сістэмны, дробны, сярэдні або буйны.',
+      'f.style.3': 'Восем жанраў са сваімі колерамі — любы можна змяніць.',
+      'f.style.4': 'Руская, беларуская, English — мова мяняецца адразу, без перазапуску.',
+      'f.style.5': 'Рэзервовая копія налад у файл або iCloud — калі вы самі захочаце.',
+      'f.links.t': 'Спасылкі і Handoff',
+      'f.links.1': 'Падзяліцеся перадачай кароткай спасылкай — яна адкрые яе проста ў ZorkaTV.',
+      'f.links.2': 'Handoff: пачалі глядзець на iPhone — працягніце на iPad або Mac з таго ж месца.',
+      'f.news.t': 'Аб’явы аператара',
+      'f.news.1': 'Важнае ад аператара праязджае адзін раз бягучым радком уверсе «Эфіру».',
+      'f.news.2': 'Не трэба — выключыце ў наладах.',
+      'devices.kicker': 'Прылады', 'devices.title': 'Дзе працуе',
+      'devices.lead': 'Адзін дадатак — для тэлефона, планшэта і камп’ютара.',
+      'dev.iphone': 'iOS 17 і навейшая', 'dev.ipad': 'iPadOS 17 і навейшая',
+      'dev.duo': 'Свая раскладка ў раскрытым і напалову складзеным выглядзе', 'dev.mac': 'Mac з чыпам Apple — як дадатак для iPad',
+      'need.t': 'Патрэбна свая падпіска ZALA',
+      'need.p': 'Увайдзіце з лагінам і паролем ад вашай падпіскі — і глядзіце каналы, якія ў яе ўваходзяць. ZorkaTV не прадае падпіску і не паказвае каналы без яе.',
+      'privacy.kicker': 'Прыватнасць', 'privacy.title': 'Ваша застаецца вашым',
+      'privacy.lead': 'У ZorkaTV няма свайго сервера: каналы і праграма прыходзяць проста ад аператара.',
+      'p.track.t': 'Ніякага сачэння',
+      'p.track.p': 'Няма рэкламы і сачэння паміж дадаткамі і сайтамі. ZorkaTV не ведае, хто вы.',
+      'p.login.t': 'Лагін застаецца на прыладзе',
+      'p.login.p': 'Лагін і пароль захоўваюцца ў звязцы ключоў толькі гэтай прылады і адпраўляюцца толькі аператару пры ўваходзе. У iCloud і ў рэзервовую копію яны не трапляюць.',
+      'p.crash.t': 'Справаздачы пра збоі без асабістых даных',
+      'p.crash.p': 'Калі нешта зламаецца, дадатак адправіць справаздачу праз Sentry — без лагіна, пароля, ключоў уваходу і здымкаў экрана, не звязаную з вамі. Часам туды ж ідзе, за колькі секунд адкрыўся канал.',
+      'p.cloud.t': 'iCloud — толькі па кнопцы',
+      'p.cloud.p': 'Налады трапляюць у ваш iCloud, толькі калі вы самі націснеце «Захаваць у iCloud».',
+      'foot.disclaimer': 'ZorkaTV — незалежны дадатак. Ён не звязаны з ZALA і Белтэлекамам, не ўхвалены і не падтрымліваецца імі. ZALA — таварны знак свайго ўладальніка; дадатак толькі працуе з вашай падпіскай на гэты сэрвіс.',
+      'foot.contact': 'Пытанні і прапановы — на GitHub',
+      'foot.apple': 'iPhone, iPad, Mac, AirPlay і iCloud — таварныя знакі Apple Inc.'
+    },
+    en: {
+      'meta.title': 'ZorkaTV — ZALA live TV, archive and guide on iPhone, iPad and Mac',
+      'meta.desc': 'A beautiful app for iPhone, iPad and Mac to watch ZALA with your own subscription: live channels with a preview, an archive that remembers where you stopped, and a programme guide with reminders.',
+      'skip': 'Skip to content',
+      'nav.label': 'Sections', 'nav.screens': 'Screens', 'nav.features': 'Features', 'nav.devices': 'Devices', 'nav.privacy': 'Privacy',
+      'hero.eyebrow': 'For iPhone, iPad and Mac',
+      'hero.pitch': 'ZALA live TV, archive and programme guide — with your own subscription, beautifully done.',
+      'hero.cta': 'Coming soon to TestFlight', 'hero.more': 'What it does',
+      'hero.note': 'Requires your own ZALA subscription. Not affiliated with the operator.',
+      'chip.live': 'LIVE', 'chip.resume': 'Resuming from 34:10',
+      'screens.kicker': 'Screens', 'screens.title': 'A look inside',
+      'screens.lead': 'Dark screens, an amber accent and glass panels over the video.', 'screens.strip': 'iPhone screens',
+      'cap.now': 'Live: preview and Continue Watching', 'cap.guide': 'The guide by channel and day',
+      'cap.player': 'The player with programme details', 'cap.sheet': 'Programme sheet: remind, share',
+      'cap.search': 'Search channels and the guide', 'cap.themes': 'Six themes to choose from',
+      'cap.land': 'Full screen, with glass controls', 'cap.ipad': 'iPad: the list and a large preview side by side',
+      'cap.ipadPlayer': 'iPad: the player and the channel guide', 'cap.duoOpen': 'iPhone Duo unfolded: columns meet at the fold',
+      'cap.duoHalf': 'Half-folded: video on top, controls below',
+      'alt.now': 'The Live screen on iPhone: a channel preview and the channel list', 'alt.guide': 'The programme guide grid on iPhone',
+      'alt.player': 'The player on iPhone with programme details', 'alt.sheet': 'A programme sheet on iPhone', 'alt.search': 'Search on iPhone',
+      'alt.themes': 'Choosing a theme on iPhone', 'alt.land': 'The player on iPhone in landscape, full screen',
+      'alt.ipad': 'The Live screen on iPad in two columns', 'alt.ipadPlayer': 'The player on iPad with the channel guide on the right',
+      'alt.duoOpen': 'iPhone Duo unfolded: two columns along the fold', 'alt.duoHalf': 'iPhone Duo half-folded: video on top, controls below',
+      'features.kicker': 'Features', 'features.title': 'What ZorkaTV can do',
+      'features.lead': 'Everything you need to enjoy TV — at home and on the go.',
+      'f.live.t': 'Live',
+      'f.live.1': 'A silent preview of the channel right above the list. It opens on the channel you watched last.',
+      'f.live.2': 'Categories, favourites, your own order and hidden channels.',
+      'f.live.3': 'Every programme has a bar in its genre colour and “25 min left”.',
+      'f.live.4': 'Pause live TV and carry on from the same moment; Go Live takes you back to the broadcast.',
+      'f.guide.t': 'Guide',
+      'f.guide.1': 'A grid of all channels, from the start of the archive to tomorrow.',
+      'f.guide.2': 'A programme sheet with the description, genre, age rating and what’s on next.',
+      'f.guide.3': 'Reminders 5 minutes before the start: tap the notification and you’re on the channel.',
+      'f.archive.t': 'Archive',
+      'f.archive.1': 'Missed a programme? Watch the recording. Or start one that’s on from the beginning.',
+      'f.archive.2': 'Pick up right where you stopped: “Resuming from 34:10 · From the start”.',
+      'f.archive.3': 'Unfinished programmes wait for you in Continue Watching.',
+      'f.archive.4': 'The next programme starts on its own; play recordings at 0.75× to 2×.',
+      'f.player.t': 'Player',
+      'f.player.1': 'Picture in Picture and AirPlay are always one tap away.',
+      'f.player.2': 'Quality: Auto, High or Saver, remembered per channel — and a 1080p badge shows what you’re actually getting.',
+      'f.player.3': 'Audio tracks and subtitles wherever the channel provides them.',
+      'f.player.4': 'A sleep timer from 15 minutes to 2 hours, with a one-minute warning.',
+      'f.player.5': 'Broadcast breaks show when the channel is back, and you can watch from the archive meanwhile.',
+      'f.search.t': 'Search',
+      'f.search.1': 'Channels and programmes together: On now, In the archive, Coming up.',
+      'f.search.2': 'Type a number such as 53 and that channel comes first.',
+      'f.search.3': 'What’s on now by genre, and your recent searches.',
+      'f.wide.t': 'iPad, iPhone Duo and Mac',
+      'f.wide.1': 'On a wide screen, two columns: the list beside a large preview, the player beside the channel guide.',
+      'f.wide.2': 'iPhone Duo: the columns meet at the fold; half-folded, the video sits on top and the controls below.',
+      'f.wide.3': 'Keyboard and mouse: Space to pause, arrows to skip and switch channels, digits to dial a channel, ⌘F to search.',
+      'f.wide.4': 'Any window size, Split View or Stage Manager — the layout adapts on the fly without stopping the video.',
+      'f.style.t': 'Make it yours',
+      'f.style.1': 'Six themes: System, Dark, Cobalt, Graphite, Light and Sand.',
+      'f.style.2': 'Text size: System, Small, Medium or Large.',
+      'f.style.3': 'Eight genre groups, each in its own colour — change any of them.',
+      'f.style.4': 'Russian, Belarusian or English — the language switches instantly, no restart.',
+      'f.style.5': 'Back up your settings to a file or iCloud whenever you choose.',
+      'f.links.t': 'Links and Handoff',
+      'f.links.1': 'Share a programme with a short link that opens it right in ZorkaTV.',
+      'f.links.2': 'Handoff: start watching on iPhone, carry on from the same spot on iPad or Mac.',
+      'f.news.t': 'Operator announcements',
+      'f.news.1': 'Important news from the operator scrolls past once at the top of Live.',
+      'f.news.2': 'Don’t want it? Turn it off in Settings.',
+      'devices.kicker': 'Devices', 'devices.title': 'Where it runs',
+      'devices.lead': 'One app for your phone, tablet and computer.',
+      'dev.iphone': 'iOS 17 or later', 'dev.ipad': 'iPadOS 17 or later',
+      'dev.duo': 'Its own layouts unfolded and half-folded', 'dev.mac': 'Mac with Apple silicon, as the iPad app',
+      'need.t': 'Requires your own ZALA subscription',
+      'need.p': 'Sign in with the login and password of your subscription and watch the channels it includes. ZorkaTV doesn’t sell subscriptions or show channels without one.',
+      'privacy.kicker': 'Privacy', 'privacy.title': 'What’s yours stays yours',
+      'privacy.lead': 'ZorkaTV has no server of its own: channels and the guide come straight from the operator.',
+      'p.track.t': 'No tracking',
+      'p.track.p': 'No ads and no tracking across apps and websites. ZorkaTV doesn’t know who you are.',
+      'p.login.t': 'Your login stays on the device',
+      'p.login.p': 'Your login and password live in this device’s keychain only and go only to the operator when you sign in. They never reach iCloud or a backup.',
+      'p.crash.t': 'Crash reports without personal data',
+      'p.crash.p': 'If something breaks, the app sends a report via Sentry — without your login, password, session keys or screenshots, and not linked to you. Sometimes it also notes how many seconds a channel took to open.',
+      'p.cloud.t': 'iCloud only when you ask',
+      'p.cloud.p': 'Your settings go to your iCloud only when you tap Save to iCloud yourself.',
+      'foot.disclaimer': 'ZorkaTV is an independent app. It is not affiliated with, endorsed or supported by ZALA or Beltelecom. ZALA is a trademark of its owner; the app simply works with your subscription to that service.',
+      'foot.contact': 'Questions and ideas — on GitHub',
+      'foot.apple': 'iPhone, iPad, Mac, AirPlay and iCloud are trademarks of Apple Inc.'
+    }
+  };
+
+  // Russian lives in the page itself; remember it so the switcher can come back to it.
+  var meta = document.querySelector('meta[name="description"]');
+  var ru = { 'meta.title': document.title, 'meta.desc': meta.content };
+  var texts = document.querySelectorAll('[data-i]');
+  var attrs = document.querySelectorAll('[data-ia]');
+  function pairs(el) { return el.getAttribute('data-ia').split(';').map(function (p) { return p.split(':'); }); }
+  texts.forEach(function (el) { ru[el.getAttribute('data-i')] = el.textContent; });
+  attrs.forEach(function (el) { pairs(el).forEach(function (p) { ru[p[1]] = el.getAttribute(p[0]); }); });
+  T.ru = ru;
+
+  function apply(lang) {
+    var t = T[lang] || ru;
+    function get(key) { return t[key] != null ? t[key] : ru[key]; }
+    texts.forEach(function (el) { el.textContent = get(el.getAttribute('data-i')); });
+    attrs.forEach(function (el) { pairs(el).forEach(function (p) { el.setAttribute(p[0], get(p[1])); }); });
+    document.title = get('meta.title');
+    meta.content = get('meta.desc');
+    root.lang = lang;
+    document.querySelectorAll('.lang button').forEach(function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-lang') === lang ? 'true' : 'false');
+    });
+  }
+
+  function store(lang) { try { localStorage.setItem('zorkatv.lang', lang); } catch (e) {} }
+  function stored() { try { return localStorage.getItem('zorkatv.lang'); } catch (e) { return null; } }
+
+  // Order: ?lang= in the address, then the visitor's own choice, then the browser language (be/en), else Russian.
+  var fromURL = new URLSearchParams(location.search).get('lang');
+  var browser = ((navigator.languages && navigator.languages[0]) || navigator.language || 'ru').slice(0, 2).toLowerCase();
+  var lang = [fromURL, stored(), browser].filter(function (l) { return l && T[l]; })[0] || 'ru';
+  if (lang !== 'ru') apply(lang);
+
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var l = b.getAttribute('data-lang');
+      apply(l); store(l);
+      if (fromURL) { var u = new URL(location.href); u.searchParams.delete('lang'); history.replaceState(null, '', u); fromURL = null; }
+    });
+  });
+
+  // The header turns into the page's own glass once the sky is behind it.
+  var top = document.getElementById('top');
+  function onScroll() { top.classList.toggle('scrolled', window.scrollY > 40); }
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Sections rise into view; with reduced motion the CSS keeps them still.
+  var items = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    items.forEach(function (el) { io.observe(el); });
+  } else {
+    items.forEach(function (el) { el.classList.add('in'); });
+  }
+})();
+</script>
 </body>
 </html>
