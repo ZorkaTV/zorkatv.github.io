@@ -161,8 +161,8 @@
   if (deep) { open.href = deep; } else { open.style.display = 'none'; }
   document.getElementById('note').textContent = deep ? t.note : '';
   document.getElementById('small').textContent = t.small;
-  // Where «Установить» leads: the site for now; the public TestFlight link, later the App Store page.
-  var INSTALL_URL = '/';
+  // Where «Установить» leads: the public TestFlight link, later the App Store page.
+  var INSTALL_URL = 'https://testflight.apple.com/join/dJFRM7un';
   var install = document.getElementById('install');
   install.textContent = t.install;
   install.href = INSTALL_URL;
